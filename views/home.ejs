@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI image Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: aliceblue;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px 20px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .navbar .logo a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            list-style-type: none;
+            display: flex;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger .bar {
+            width: 25px;
+            height: 4px;
+            margin: 5px;
+            background-color: white;
+        }
+
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                text-align: center;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: #333;
+                padding: 20px 0;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 15px 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+        }
+
+        #bod {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background-image: url('https://incubator.ucf.edu/wp-content/uploads/2023/07/artificial-intelligence-new-technology-science-futuristic-abstract-human-brain-ai-technology-cpu-central-processor-unit-chipset-big-data-machine-learning-cyber-mind-domination-generative-ai-scaled-1-1500x1000.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .content {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        #tem {
+            margin-top: 20px;
+        }
+
+        #photo1 {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            margin-bottom: 15px;
+            border: 2px solid green;
+            box-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+        }
+
+        #tem p {
+            color: blanchedalmond;
+            font-size: large;
+            text-align: justify;
+        }
+
+        #mid {
+            margin-top: 5%;
+            margin-left: 5%;
+            margin-right: 5%;
+            border: 2px solid black;
+            background-color: bisque;
+            justify-items: center;
+            justify-content: center;
+            justify-self: center;
+            margin-bottom: 5%;
+
+        }
+
+        #btng {
+            background-color: #4CAF50;
+            /* Green background */
+            border: none;
+            justify-self: center;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            /* Rounded corners */
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            /* Smooth transition on hover */
+        }
+
+        #btng a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+
+        #btnp a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+
+        #btng:hover {
+            background-color: #45a049;
+            /* Darker green on hover */
+            transform: scale(1.05);
+            /* Slight scaling effect on hover */
+        }
+
+        #btnp:hover {
+            background-color: #45a049;
+            /* Darker green on hover */
+            transform: scale(1.05);
+            /* Slight scaling effect on hover */
+        }
+
+        #btng:active {
+            background-color: #388e3c;
+            /* Even darker green when button is clicked */
+        }
+
+        #btnp:active {
+            background-color: #388e3c;
+            /* Even darker green when button is clicked */
+        }
+
+
+        #btng a:hover {
+            color: #f0f0f0;
+        }
+
+        #btnp a:hover {
+            color: #f0f0f0;
+        }
+
+
+
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 40px 20px;
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: left;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .footer-section {
+            width: 24%;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-section a:hover {
+            color: #f0f0f0;
+        }
+
+        .footer-section ul {
+            list-style-type: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 20px;
+            background-color: #222;
+        }
+
+        .footer-bottom p {
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .footer-section {
+                width: 48%;
+            }
+        }
+
+        @media screen and (max-height:720) {
+            .content {
+                margin-top: 5%;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .footer-section {
+                width: 100%;
+            }
+        }
+
+        #adds {
+            display: flex;
+            max-width: 1200px;
+
+        }
+
+
+      #scroll{
+        display: flex;
+        max-width: 2400px;
+        height: 400px;
+        flex-direction: row;
+        overflow-x: scroll;
+
+      }
+      .images{
+        display: flex;
+        flex-direction: column;
+        overflow-wrap: break-word;
+        padding: 4px;
+        border: 2px solid green ;
+        padding: 2px;
+
+      
+
+      }
+
+        .photos {
+            height: 300px;
+            
+        }
+
+
+        .download-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #4caf50, #81c784);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 3px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+            position: relative;
+            overflow: hidden;
+            width:87%;
+            margin-top: 8px;
+            margin-left: 2%;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(45deg, #388e3c, #66bb6a);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: skewX(-25deg);
+            transition: left 0.5s;
+        }
+
+        .download-btn:hover::before {
+            left: 100%;
+        }
+
+
+
+        #mid{
+            border-radius: 5px;
+        }
+        #mid button{
+            margin-bottom: 2%;
+        }
+
+
+
+
+
+
+     #logo{
+        height: 50px;
+        width: 50px;
+        border-radius: 30%;
+        border: 3px solid rgb(189, 189, 236);
+     }
+
+     #logo:hover{
+        transform: scale(1.2);
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDW1xhL0N5V4RNpp7Vt9_ZRcKTZpnry0fMBg&s" alt="logo" id="logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/signup">SignUp</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="/login">Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+
+    <div id="bod">
+        <div class="content">
+            <h1>Welcome to the Future of AI</h1>
+            <p>Explore the advancements in artificial intelligence, machine learning, and the technologies shaping our
+                world.</p>
+            <div id="tem">
+                <img src="https://images.nightcafe.studio//assets/og-dragon-headphones.jpg?tr=w-1200,c-at_max"
+                    alt="tempalte" id="photo1">
+                <p>AI generated Image:</p>
+                <button id="btng"><a href="/geni" id="free">Generate image for Free </a></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mid">
+        <h2>Try our best Ai to generate images </h2>
+
+        <p>this model for creating images, write prompt and generate image as you want</p>
+
+        <button id="btng"><a href="/geni" id="free">Generate image for Free </a></button>
+
+
+
+    </div>
+
+
+    <div id="scroll">
+
+
+        <div class="images">
+            <img src="https://media.istockphoto.com/id/1387900612/photo/automation-data-analytic-with-robot-and-digital-visualization-for-big-data-scientist.webp?s=2048x2048&w=is&k=20&c=zLKHgq_p3IRkXSjbrOEPuJiXD7opXMRXiod4J-MXJuw="
+                alt="none" class="photos" >
+
+
+                <a href="https://media.istockphoto.com/id/1387900612/photo/automation-data-analytic-with-robot-and-digital-visualization-for-big-data-scientist.webp?s=2048x2048&w=is&k=20&c=zLKHgq_p3IRkXSjbrOEPuJiXD7opXMRXiod4J-MXJuw=" download class="download-btn">
+        Download File
+    </a>
+
+        </div>
+        
+        <div class="images">
+            <img src="https://cdn.pixabay.com/photo/2023/09/25/03/27/ai-generated-8274116_640.png"
+                alt="none" class="photos" >
+
+
+                <a href="https://cdn.pixabay.com/photo/2023/09/25/03/27/ai-generated-8274116_640.png" download class="download-btn">
+        Download File
+    </a>
+
+        </div>
+        
+        <div class="images">
+            <img src="https://cdn.pixabay.com/photo/2024/04/16/16/25/ai-generated-8700383_640.jpg"
+                alt="none" class="photos" >
+
+
+                <a href="https://cdn.pixabay.com/photo/2024/04/16/16/25/ai-generated-8700383_640.jpg" download class="download-btn">
+        Download File
+    </a>
+
+        </div>
+
+        <div class="images">
+            <img src="https://cdn.pixabay.com/photo/2024/01/22/11/02/ai-generated-8524928_640.png"
+                alt="none" class="photos" >
+
+
+                <a href="https://cdn.pixabay.com/photo/2024/01/22/11/02/ai-generated-8524928_640.png" download class="download-btn">
+        Download File
+    </a>
+
+        </div>
+
+        <div class="images">
+            <img src="https://cdn.pixabay.com/photo/2024/04/26/19/16/bohemian-8722478_640.png"
+                alt="none" class="photos" >
+                
+
+        <a href="https://cdn.pixabay.com/photo/2024/04/26/19/16/bohemian-8722478_640.png" download class="download-btn">
+            Download File
+        </a>
+    
+    
+        </div>
+
+
+
+
+        <div class="images">
+            <img src="https://cdn.pixabay.com/photo/2024/02/20/13/08/ai-generated-8585511_640.jpg"
+                alt="none" class="photos" >
+                
+
+        <a href="https://cdn.pixabay.com/photo/2024/02/20/13/08/ai-generated-8585511_640.jpg" download class="download-btn">
+            Download File
+        </a>
+    
+    
+        </div>
+
+
+
+        
+        <div class="images">
+            <img src="https://cdn.pixabay.com/photo/2024/06/08/04/19/ai-generated-8815780_640.jpg"
+                alt="none" class="photos" >
+                
+
+        <a href="https://cdn.pixabay.com/photo/2024/06/08/04/19/ai-generated-8815780_640.jpg" download class="download-btn">
+            Download File
+        </a>
+    
+    
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h2>About Us</h2>
+                    <p>We are a forward-thinking tech company, exploring the boundaries of artificial intelligence and
+                        machine learning to build innovative solutions for tomorrow's challenges.</p>
+                </div>
+                <div class="footer-section links">
+                    <h2>Quick Links</h2>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/signup">SignUp</a></li>
+                        <li><a href="/login">Login</a></li>
+                        <li><a href="https://www.facebook.com/profile.php?id=100094616520545">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h2>Contact Us</h2>
+                    <p>Email: <a href="mailto:mehedimurshid9641@gmail.com">mehedimurshid9641@gmail.com</a></p>
+                    <p>Phone:91 + 999 9999 999</p>
+                </div>
+                <div class="footer-section social">
+                    <h2>Follow Us</h2>
+                    <ul>
+                        <li><a href="https://www.facebook.com/profile.php?id=100094616520545" target="_blank">Facebook</a></li>
+                        <li><a href="#" target="_blank">Twitter</a></li>
+                        <li><a href="#" target="_blank">LinkedIn</a></li>
+                        <li><a href="#" target="_blank">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 AI Website. All rights reserved.</p>
+            </div>
+        </footer>
+
+
+        <script>
+            const hamburger = document.getElementById("hamburger");
+            const navLinks = document.querySelector(".nav-links");
+
+            hamburger.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+
+</html>
